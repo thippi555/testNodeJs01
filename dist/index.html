@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="UTF-8"><title>SDK Event Validator</title></head><body><div id="content"><h1 style="color: red; font-size: 48px;">🔥 NextJS検証中！ 🔥</h1><p>バージョン: 1.2.20</p><p>時刻: <span id="time"></span></p><h2>静的検証のページです！</h2><button id="testBtn">テストボタン</button></div><script src="https://dev.azure.com/scripts/VSS.SDK.min.js"></script><script>// ⭐ ここでロード直後のログ
+      console.log("⭐ index.html スクリプト実行開始");
+
+      document.addEventListener("DOMContentLoaded", () => {
+          console.log("⭐ DOMContentLoaded 発火");
+      });
+
+      if (typeof VSS !== 'undefined') {
+          console.log("⭐ VSS オブジェクトあり");
+          VSS.init({ explicitNotifyLoaded: true });
+          VSS.ready(function() {
+              console.log("⭐ VSS.ready 実行された");
+
+              const btn = document.getElementById("testBtn");
+              console.log("⭐ testBtn要素:", btn);
+
+              if (btn) {
+                  btn.onclick = () => {
+                      alert("✅ onclick 動きました！");
+                      console.log("✅ クリックイベント発火しました");
+                  };
+              }
+          });
+      } else {
+          console.error("❌ VSS がロードされていません");
+      }</script><script defer="defer" src="bundle.js"></script></body></html>

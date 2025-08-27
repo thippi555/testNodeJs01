@@ -1,0 +1,31 @@
+{
+  "manifestVersion": 1,
+  "id": "sdk-event-validator-2025",
+  "name": "SDK Event Validator",
+  "version": "1.2.31",
+  "publisher": "gyomusasshin",
+  "description": "Azure DevOps SDK Event Validation Tool - NEW",
+  "targets": [
+    { "id": "Microsoft.VisualStudio.Services" }
+  ],
+  "categories": ["Azure Boards"],
+  "icons": { "default": "icon.png" },
+  "files": [
+    { "path": "dist", "addressable": true },
+    { "path": "icon.png", "addressable": true }
+  ],
+  "contributions": [
+    {
+      "id": "sdk-event-hub-new",
+      "type": "ms.vss-web.hub",
+      "targets": ["ms.vss-work-web.work-hub-group"],
+      "properties": {
+        "name": "SDK Event Validator",
+        "uri": "dist/index.html"
+      }
+    }
+  ],
+  "scopes": [
+    "vso.work"
+  ]
+}
