@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "sdk-event-validator-2025",
   "name": "SDK Event Validator",
-  "version": "1.2.67",
+  "version": "1.2.75",
   "publisher": "gyomusasshin",
   "description": "Azure DevOps SDK Event Validation Tool - NEW",
   "targets": [
