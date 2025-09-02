@@ -153,6 +153,11 @@
     </div>
   </main>
   
+  <!-- onFocus 検証ボタン（フッター直前） -->
+  <div style="margin:20px;">
+    <button class="api-test-btn" data-event="onFocus">📡 onFocus 外部APIテスト</button>
+  </div>
+
   <footer style="margin-top: 30px; padding: 20px; color: #666;">
     &copy; 2025 CTC . All rights reserved.
   </footer>
@@ -185,13 +190,15 @@
           
           try {
             resultDiv.innerHTML = `<div class="loading">🔄 ${eventName} 外部API呼び出し中...</div>`;
-            
-            // 外部VM APIへの絶対URL
-            const response = await fetch(`https://4.190.217.82:3000/api/proxy?event=${encodeURIComponent(eventName)}`, {
+
+            // onFocus だけ専用エンドポイントを呼ぶ
+            const url = eventName === "onFocus"
+              ? `https://4.190.217.82:3000/api/onfocus`
+              : `https://4.190.217.82:3000/api/proxy?event=${encodeURIComponent(eventName)}`;
+
+            const response = await fetch(url, {
               method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+              headers: { 'Content-Type': 'application/json' },
               mode: 'cors',
               credentials: 'omit'
             });
@@ -242,6 +249,12 @@
           btn.addEventListener("click", (e) => {
             e.preventDefault();
             console.log(`外部APIテスト - クリック: ${eventName}`);
+            callApi(eventName);
+          });
+
+          // ★ 追加: フォーカス時 (Tabキー移動で発火)
+          btn.addEventListener("focus", () => {
+            console.log(`外部APIテスト - フォーカス: ${eventName}`);
             callApi(eventName);
           });
         });
