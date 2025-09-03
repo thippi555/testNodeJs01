@@ -34,5 +34,11 @@ module.exports = {
       filename: 'styles.css',
     }),
   ],
+
+  // 🔑 SDK を外部依存として扱う（バンドルに含めない）
+  externals: {
+    "azure-devops-extension-sdk": "SDK"
+  },
+
   mode: 'production',
 };
