@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>DevOps SDK イベント検証入口</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+    header {
+      background: #0078d7;
+      color: #fff;
+      padding: 20px;
+      font-size: 24px;
+    }
+    main { 
+      margin-top: 30px; 
+      padding: 0 20px;
+    }
+    
+    .btn {
+      display: block;
+      width: 300px;
+      margin: 12px auto;
+      padding: 14px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      background-color: #0078d7;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .btn:hover { background-color: #005a9e; }
+    
+    /* API テスト用のボタン */
+    .api-test-btn {
+      display: block;
+      width: 280px;
+      margin: 8px auto;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 2px solid #28a745;
+      background-color: #fff;
+      color: #28a745;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .api-test-btn:hover { 
+      background-color: #28a745; 
+      color: white;
+    }
+    
+    .section-divider {
+      margin: 40px auto;
+      border-top: 2px solid #ddd;
+      width: 60%;
+    }
+    
+    .section-title {
+      background: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 20px 0;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    #api-result { 
+      margin: 30px auto; 
+      padding: 15px;
+      max-width: 80%;
+      min-height: 60px;
+      font-size: 14px; 
+      color: #333;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: left;
+      border: 2px solid #e0e0e0;
+      font-family: monospace;
+    }
+    
+    .loading {
+      color: #0078d7;
+      font-style: italic;
+      text-align: center;
+    }
+    .success {
+      border-left: 4px solid #28a745;
+      background-color: #d4edda;
+    }
+    .error {
+      border-left: 4px solid #dc3545;
+      background-color: #f8d7da;
+    }
+    
+    pre {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>DevOps SDK イベント検証</header>
+  <main>
+    <h1>イベント一覧</h1>
+    <p>検証したいイベントを選んでください</p>
+
+    <!-- 既存のページ遷移ボタン -->
+    <a class="btn" href="https://4.190.217.82:3000/onloaded">onLoaded 検証ページへ</a>
+    <a class="btn" href="https://4.190.217.82:3000/onfieldchanged">onFieldChanged 検証ページへ</a>
+    <a class="btn" href="https://4.190.217.82:3000/onsaved">onSaved 検証ページへ</a>
+    <a class="btn" href="https://4.190.217.82:3000/onreset">onReset 検証ページへ</a>
+    <a class="btn" href="https://4.190.217.82:3000/onrefreshed">onRefreshed 検証ページへ</a>
+    <a class="btn" href="https://4.190.217.82:3000/onunloaded">onUnloaded 検証ページへ</a>
+
+    <!-- セクション区切り -->
+    <div class="section-divider"></div>
+    
+    <!-- APIテストセクション -->
+    <div class="section-title">🔧 外部APIテスト機能</div>
+    <p style="color: #666; font-size: 14px;">
+      下のボタンにマウスオーバーまたはクリックすると、外部Node.js API（4.190.217.82:3000）を直接テストできます
+    </p>
+
+    <button class="api-test-btn" data-event="onLoaded">📡 onLoaded 外部APIテスト</button>
+    <button class="api-test-btn" data-event="onFieldChanged">📡 onFieldChanged 外部APIテスト</button>
+    <button class="api-test-btn" data-event="onSaved">📡 onSaved 外部APIテスト</button>
+    <button class="api-test-btn" data-event="onReset">📡 onReset 外部APIテスト</button>
+    <button class="api-test-btn" data-event="onRefreshed">📡 onRefreshed 外部APIテスト</button>
+    <button class="api-test-btn" data-event="onUnloaded">📡 onUnloaded 外部APIテスト</button>
+
+    <!-- APIの結果表示欄 -->
+    <div id="api-result">
+      <div style="text-align: center; color: #666;">
+        ⬆️ 緑のAPIテストボタンにマウスオーバーまたはクリックで外部APIをテストできます
+      </div>
+    </div>
+  </main>
+  
+  <!-- onFocus 検証ボタン（フッター直前） -->
+  <div style="margin:20px;">
+    <button class="api-test-btn" data-event="onFocus">📡 onFocus 外部APIテスト</button>
+  </div>
+
+  <footer style="margin-top: 30px; padding: 20px; color: #666;">
+    &copy; 2025 CTC . All rights reserved.
+  </footer>
+
+  <!-- ⚡ Azure DevOps 公式 SDK (VSS) を読み込む -->
+  <script src="https://unpkg.com/vss-web-extension-sdk/lib/VSS.SDK.min.js"></script>
+  <script>
+    // VSS SDK読み込み確認関数
+    function waitForVSS(callback) {
+      if (typeof VSS !== 'undefined') {
+        callback();
+      } else {
+        console.log('VSS SDK読み込み待機中...');
+        setTimeout(() => waitForVSS(callback), 100);
+      }
+    }
+
+    // メイン初期化関数
+    function initializeApp() {
+      console.log("VSS SDK読み込み完了");
+
+      // SDK 初期化
+      VSS.init({ explicitNotifyLoaded: true });
+
+      VSS.ready(function () {
+        console.log("拡張ロードOK");
+
+        async function callApi(eventName) {
+          const resultDiv = document.getElementById("api-result");
+          
+          try {
+            resultDiv.innerHTML = `<div class="loading">🔄 ${eventName} 外部API呼び出し中...</div>`;
+
+            // onFocus だけ専用エンドポイントを呼ぶ
+            const url = eventName === "onFocus"
+              ? `https://4.190.217.82:3000/api/onfocus`
+              : `https://4.190.217.82:3000/api/proxy?event=${encodeURIComponent(eventName)}`;
+
+            const response = await fetch(url, {
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' },
+              mode: 'cors',
+              credentials: 'omit'
+            });
+            
+            if (!response.ok) {
+              throw new Error(`HTTPエラー: ${response.status} ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            resultDiv.innerHTML = `
+              <div class="success">
+                <h3>✅ ${eventName} - 外部API呼び出し成功</h3>
+                <p><strong>外部サーバー:</strong> 4.190.217.82:3000</p>
+                <p><strong>メッセージ:</strong> ${data.message || 'なし'}</p>
+                <p><strong>成功:</strong> ${data.success}</p>
+                <p><strong>イベント:</strong> ${data.event}</p>
+                <p><strong>タイムスタンプ:</strong> ${data.data?.timestamp || 'N/A'}</p>
+                <details>
+                  <summary style="cursor: pointer; color: #0078d7;">📋 詳細レスポンス（クリックで展開）</summary>
+                  <pre>${JSON.stringify(data, null, 2)}</pre>
+                </details>
+              </div>
+            `;
+            
+          } catch (err) {
+            console.error('外部API呼び出しエラー:', err);
+            resultDiv.innerHTML = `
+              <div class="error">
+                <h3>❌ ${eventName} - 外部API呼び出し失敗</h3>
+                <p><strong>外部サーバー:</strong> 4.190.217.82:3000</p>
+                <p><strong>エラー:</strong> ${err.message}</p>
+                <p><strong>時刻:</strong> ${new Date().toLocaleString('ja-JP')}</p>
+              </div>
+            `;
+          }
+        }
+
+        // APIテストボタンのイベント設定
+        document.querySelectorAll(".api-test-btn").forEach((btn) => {
+          const eventName = btn.getAttribute("data-event");
+          
+          btn.addEventListener("mouseenter", () => {
+            console.log(`外部APIテスト - マウスオーバー: ${eventName}`);
+            callApi(eventName);
+          });
+          
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            console.log(`外部APIテスト - クリック: ${eventName}`);
+            callApi(eventName);
+          });
+
+          // ★ 追加: フォーカス時 (Tabキー移動で発火)
+          btn.addEventListener("focus", () => {
+            console.log(`外部APIテスト - フォーカス: ${eventName}`);
+            callApi(eventName);
+          });
+        });
+
+        // ロード完了通知
+        VSS.notifyLoadSucceeded();
+        console.log("VSS初期化完了 - 外部APIテスト機能有効");
+      });
+    }
+
+    // VSS SDK読み込みを待ってから初期化
+    waitForVSS(initializeApp);
+  </script>
+</body>
+</html>
